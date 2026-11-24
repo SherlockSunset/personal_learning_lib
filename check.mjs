@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import vm from 'node:vm';
-import {root,loadNotes,validateNote} from './scripts/content.mjs';
+import {root,loadNotes,validateNote,getImagePaths} from './scripts/content.mjs';
 import {ingest,saveDraft,extractHTML,publicURL} from './scripts/ingest.mjs';
 const notes=await loadNotes();assert.ok(notes.length>=0);
 const html=await fs.readFile(path.join(root,'dist/index.html'),'utf8');
@@ -15,21 +15,22 @@ const script=html.match(/<script>([\s\S]*)<\/script>/)[1];new vm.Script(script);
 const embedded=vm.runInNewContext(script.slice(0,script.indexOf(';\n'))+';LIBRARY_DATA');assert.equal(embedded.length,notes.length);
 for(const n of notes){const built=embedded.find(x=>x.id===n.id);assert.equal(built.source,n.source);assert.equal(built.explanations?.length,n.explanations?.length);assert.equal(built.references?.length,n.references?.length);}
 assert.equal(await fs.readFile(path.join(root,'dist/.nojekyll'),'utf8'),'');
-for(const n of notes)for(const image of n.images){assert.equal(new URL(image,'https://example.github.io/learning/').pathname,'/learning/'+image);await fs.access(path.join(root,'dist',image));}
+for(const n of notes)for(const image of getImagePaths(n)){assert.equal(new URL(image,'https://example.github.io/learning/').pathname,'/learning/'+image);await fs.access(path.join(root,'dist',image));}
 assert.throws(()=>validateNote({...notes[0],category:'其他'}));assert.throws(()=>validateNote({...notes[0],images:['assets/../secret.png']}));
 assert.throws(()=>validateNote({...notes[0],explanations:[{title:'缺少讲解',body:''}]}));
 assert.throws(()=>validateNote({...notes[0],references:[{title:'无效协议',url:'javascript:alert(1)'}]}));
 const hostile=JSON.stringify([{title:'</script><script>alert(1)</script>'}]).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');assert.doesNotMatch(hostile,/<\/script>/);assert.match(JSON.parse(hostile)[0].title,/<script>/);
-assert.equal(extractHTML('<title>例子</title><article><p>内容</p><img src="figure.png"></article><script>bad</script>').text,'内容');
+const extracted=extractHTML('<title>例子</title><article><h2>缓存原理</h2><p>内容</p><figure><img src="figure.png" alt="示意图"><figcaption>原始图注</figcaption></figure></article><script>bad</script>');assert.match(extracted.text,/内容[\s\S]*原文配图 IMG_001/);assert.equal(extracted.imageDetails[0].caption,'原始图注');assert.equal(extracted.imageDetails[0].nearbyHeading,'缓存原理');assert.equal(extracted.imageDetails[0].alt,'示意图');assert.doesNotMatch(extracted.text,/bad/);
+const renderingFunctions=appSource.slice(appSource.indexOf('function figureHTML'),appSource.indexOf('\nfunction route('));const escapeFunction=appSource.slice(appSource.indexOf('const esc='),appSource.indexOf('const categories='));const context=vm.createContext({});vm.runInContext(escapeFunction+renderingFunctions,context);const inline=vm.runInContext('bodyHTML("第一段\\n\\n第二段",[{src:"assets/n/figure.png",alt:"图",caption:"图注",afterParagraph:1}],"https://example.com")',context);assert.ok(inline.indexOf('第一段')<inline.indexOf('<figure'));assert.ok(inline.indexOf('</figure>')<inline.indexOf('第二段'));assert.match(inline,/原文配图来源/);
 for(const url of ['file:///a','http://127.0.0.1','https://host.local','https://user:pass@example.com'])assert.throws(()=>publicURL(url));
 const temp=await fs.mkdtemp(path.join(os.tmpdir(),'zhixu-test-'));
 const originalFetch=globalThis.fetch;
 try{
  await fs.mkdir(path.join(temp,'source'));await fs.writeFile(path.join(temp,'source/figure.png'),Buffer.from('png-test'));
  const file=path.join(temp,'source/article.md');await fs.writeFile(file,'# 测试文章\n正文：理解工具调用。\n![配图](figure.png)');
- let result=await ingest(file,{keepImages:true,base:temp});assert.equal(result.draft.images.length,1);assert.match(await fs.readFile(path.join(result.folder,'source.txt'),'utf8'),/理解工具调用/);assert.throws(()=>validateNote(result.draft));
+ let result=await ingest(file,{base:temp});assert.equal(result.draft.images.length,1);assert.match(await fs.readFile(path.join(result.folder,'source.txt'),'utf8'),/理解工具调用/);assert.throws(()=>validateNote(result.draft));assert.equal(result.imageDetails[0].localPath,result.draft.images[0]);
  await assert.rejects(()=>fs.access(path.join(temp,'content',result.draft.images[0])));await fs.access(path.join(result.folder,'assets',path.basename(result.draft.images[0])));
- const draft={...result.draft,title:'工具调用入门',summary:'理解参数校验。',category:'Agent 开发',tags:['工具调用'],points:[{title:'先校验再执行',body:'工具收到参数后需要检查格式。'}]};
+ const draft={...result.draft,images:[],title:'工具调用入门',summary:'理解参数校验。',category:'Agent 开发',tags:['工具调用'],points:[{title:'先校验再执行',body:'工具收到参数后需要检查格式。',illustrations:[{src:result.draft.images[0],alt:'参数示意图',caption:'原文配图',afterParagraph:1}]}]};
  const draftPath=path.join(result.folder,'draft.json');await fs.writeFile(draftPath,JSON.stringify(draft));await saveDraft(draftPath,{base:temp});assert.equal((await loadNotes(temp)).length,1);
  assert.equal((await ingest(file,{keepImages:true,base:temp})).draft.summary,'理解参数校验。');
  await assert.rejects(()=>saveDraft(draftPath,{base:temp}),/EEXIST/);

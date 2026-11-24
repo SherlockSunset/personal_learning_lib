@@ -2,7 +2,7 @@
 
 面向入门级大模型 Agent 开发工程师。网页只展示知识、分类和搜索；内容由本地 Codex 整理，完成后由你手动提交与推送到 GitHub，GitHub Pages 构建更新。
 
-默认文章同时提供「知识提要」和「详细讲解」两层内容，优先打开详细讲解。后者覆盖主要技术主题，展开原理、步骤、贯穿案例、使用边界与自测；原文通过页面顶部与底部的链接阅读。文件若没有可核实的原文链接，则显示来源标题，不编造 URL。
+默认文章同时提供「知识提要」和「详细讲解」两层内容，优先打开详细讲解。后者覆盖主要技术主题，展开原理、步骤、贯穿案例、使用边界与自测；默认下载正文配图并插在对应章节的相关段落，附中文图注和原文来源，支持点击看大图。原文通过页面顶部与底部的链接阅读。文件若没有可核实的原文链接，则显示来源标题，不编造 URL。
 
 ## 日常使用：直接交给本地 Codex
 
@@ -52,12 +52,14 @@ npm run dev
 ## 手动摄入与整理
 
 ```powershell
-# 抓取链接或读取文件；可选同步图片
-npm run ingest -- "https://example.com/article" --keep-images
-npm run ingest -- "D:/资料/文章.md" --keep-images
+# 抓取链接或读取文件，默认同步图片
+npm run ingest -- "https://example.com/article"
+npm run ingest -- "D:/资料/文章.md"
+# 明确不保留配图时
+npm run ingest -- "https://example.com/article" --no-images
 ```
 
-脚本会生成 `inbox/note-<内容指纹>/source.txt`、`metadata.json` 与 `draft.json`，待选配图暂存于同目录的 `assets/`。它只提取原文，不会伪装成已完成的 AI 总结。让 Codex 阅读原文，完善草稿后保存；只有草稿中引用的图片才移入正式内容目录：
+脚本会生成 `inbox/note-<内容指纹>/source.txt`、`metadata.json` 与 `draft.json`，待选配图暂存于同目录的 `assets/`。HTML 正文保留图片位置标记，metadata.json 提供图号、图注、小标题和本地路径；Codex 据此判断插入位置，剔除广告与装饰图片。脚本只提取原文，不会伪装成已完成的 AI 总结。让 Codex 阅读原文，完善草稿后保存；只有草稿中引用的图片才移入正式内容目录：
 
 ```powershell
 npm run note:save -- "inbox/note-内容指纹/draft.json"
@@ -69,6 +71,24 @@ npm run validate
 JSON 结构见 `content/notes/note-0f561bcbef.json`：id、title、category、summary、tags、points、explanations、references、images、source、sourceTitle、created、updated。points（知识提要）和 explanations（详细讲解）每项包含 title 与 body；正文支持纯文本和代码围栏。references 每项为 title 与 url，用于可点击的延伸资料。旧笔记没有 explanations 时继续直接显示 points。分类固定为 Python 进阶、Agent 开发、大模型基础、RAG 与检索、工程实践。新增个人笔记不写 `sample: true`。
 
 图片存放于 `content/assets/`，JSON 使用 `assets/文章id/图片.png` 相对路径。CLI 支持 TXT、Markdown、HTML（文件或公开网页）、PNG/JPEG/WebP/GIF，单文件最多 5 MB。Markdown 本地图片须位于文章目录内；复制失败会报告，不静默伪造成功。登录可见、动态渲染或反爬网页可改为提供文件；PDF/DOCX 由本地 Codex 用对应文档工具提取后整理。
+
+每节可通过 illustrations 指定原图与插入位置，例如：
+
+```json
+{
+  "title": "理解缓存",
+  "body": "第一段解释。\n\n第二段解释。",
+  "illustrations": [{
+    "src": "assets/note-example/cache.png",
+    "alt": "稳定前缀与变化内容的对比图",
+    "caption": "原文配图｜前缀保持不变有利于缓存复用。",
+    "source": "https://example.com/article",
+    "afterParagraph": 1
+  }]
+}
+```
+
+afterParagraph 从 1 开始，表示插在第几个文字段落后；空行分隔段落，代码块不计数。省略时放在该节末尾。默认最多抓取 24 张图片，超出或失败会提示。图片可仅通过 illustrations 引用，保存与构建会自动收集，不必重复添加到 images 图库。
 
 ## 首次发布到 GitHub Pages
 
@@ -97,6 +117,8 @@ git config --global --add safe.directory 'G:/0000000000个人资料/learning/age
 
 ## 后续手动同步
 
+项目只保留 `.github/workflows/pages.yml` 作为活动部署工作流；GitHub 自动建议的 Jekyll 模板不适用于本项目，已归档到 `.github/legacy/`。首次同步这个调整时，请将 `.github/` 的新增、修改及旧工作流删除一起提交（例如 `git add -A .github README.md`）。
+
 ```powershell
 npm run validate
 git diff
@@ -106,6 +128,16 @@ git push origin main
 ```
 
 只更新知识时可只暂存 `content/`。Codex 默认不执行 commit、push 或远程仓库操作。
+
+## 部署排错
+
+- `configure-pages` 返回 Not Found：在仓库 Settings → Pages 将 Source 设为 GitHub Actions，然后启动完整工作流。
+- `deploy-pages` 提示找不到 `github-pages` artifact：查看同一运行的 build job。它必须依次成功构建 dist/index.html、上传名为 github-pages 的产物并得到 artifact ID，deploy 才会执行。上传与部署必须属于同一 workflow run；其他运行的同名文件不能替代。
+- 当前产物保留 7 天。若产物过期、被删除或上传步骤未完成，应启动新的完整运行，让构建与上传重新执行；仅重跑 deploy 不会补回缺失的产物。
+- 同步工作流修复后，在 Actions 中选择 **Deploy learning library to GitHub Pages → Run workflow → main**，使用当前代码启动新运行。不要将旧工作流的重跑当作新配置的验证。
+- `punycode` DeprecationWarning 是依赖警告；定位失败时优先查看实际 Error 和上传产物步骤。
+
+相关官方说明：[Pages 产物上传动作](https://github.com/actions/upload-pages-artifact/tree/v3)、[Pages 部署动作](https://github.com/actions/deploy-pages/tree/v4)。`upload-pages-artifact@v3` 内部使用兼容的 upload-artifact@v4，不需要因为 deploy-pages@v4 的版本号将其改成不存在或未经验证的版本。
 
 ## 迁移说明
 

@@ -1,3 +1,5 @@
+# Archived template. Outside workflows/ so it cannot run or overwrite the
+# learning library. Use .github/workflows/pages.yml for this Node static build.
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
 name: Deploy Jekyll with GitHub Pages dependencies preinstalled
 
