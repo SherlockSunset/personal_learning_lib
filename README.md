@@ -83,7 +83,7 @@ npm run note:save -- "inbox/note-内容指纹/draft.json" --replace
 npm run validate
 ```
 
-JSON 结构见 `content/notes/note-0f561bcbef.json`：id、title、category、summary、tags、points、explanations、references、images、source、sourceTitle、created、updated。points（知识提要）和 explanations（详细讲解）每项包含 title 与 body；正文支持纯文本和代码围栏。references 每项为 title 与 url，用于可点击的延伸资料。旧笔记没有 explanations 时继续直接显示 points。分类固定为 Python 进阶、Agent 开发、大模型基础、RAG 与检索、工程实践。新增个人笔记不写 `sample: true`。
+JSON 结构见 `content/notes/note-0f561bcbef.json`：id、title、category、summary、tags、points、explanations、references、images、source、sourceTitle、created、updated。points（知识提要）和 explanations（详细讲解）每项包含 title 与 body；正文支持纯文本和代码围栏。references 每项为 title 与 url，用于可点击的延伸资料。旧笔记没有 explanations 时继续直接显示 points。分类固定为 Python 进阶、Agent 开发、大模型基础、RAG 与检索、工程实践、AI架构。新增个人笔记不写 `sample: true`。
 
 图片存放于 `content/assets/`，JSON 使用 `assets/文章id/图片.png` 相对路径。CLI 支持 TXT、Markdown、HTML（文件或公开网页）、PNG/JPEG/WebP/GIF，单文件最多 5 MB。Markdown 本地图片须位于文章目录内；复制失败会报告，不静默伪造成功。登录可见、动态渲染或反爬网页可改为提供文件；PDF/DOCX 由本地 Codex 用对应文档工具提取后整理。
 

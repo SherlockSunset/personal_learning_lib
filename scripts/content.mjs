@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 export const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-export const categories=['Python 进阶','Agent 开发','大模型基础','RAG 与检索','工程实践'];
+export const categories=['Python 进阶','Agent 开发','大模型基础','RAG 与检索','工程实践','AI架构'];
 export function validImagePath(s){return typeof s==='string'&&/^assets\/[a-zA-Z0-9_./-]+$/.test(s)&&!s.split('/').includes('..');}
 export function getImagePaths(n){return [...new Set([...(n.images||[]),...[...(n.points||[]),...(n.explanations||[])].flatMap(p=>(p.illustrations||[]).map(im=>im.src))])];}
 function paragraphCount(body){return body.split(/(```[\s\S]*?```)/g).filter(p=>!p.startsWith('```')).flatMap(p=>p.split(/\n\s*\n/)).filter(p=>p.trim()).length;}
