@@ -1,0 +1,279 @@
+{
+  "noteId": "note-dc64149287",
+  "version": 1,
+  "questions": [
+    {
+      "id": "feedback-observation",
+      "type": "true_false",
+      "level": "辨析",
+      "prompt": "同样的提示重复执行多次，但不利用上次结果调整行动，不能据此认定形成了有效反馈。",
+      "explanation": "反馈需要让观察改变后续决策。",
+      "knowledgeIds": [
+        "feedback"
+      ],
+      "reviewSectionIds": [
+        "feedback-detail"
+      ],
+      "answer": true
+    },
+    {
+      "id": "reflection-proof",
+      "type": "true_false",
+      "level": "辨析",
+      "prompt": "同一模型审阅后确认事实正确，可以代替核对外部证据。",
+      "explanation": "模型可能重复原来的错误，事实需要来源支持。",
+      "knowledgeIds": [
+        "reflection"
+      ],
+      "reviewSectionIds": [
+        "reflection-detail"
+      ],
+      "answer": false
+    },
+    {
+      "id": "plan-adapt",
+      "type": "true_false",
+      "level": "辨析",
+      "prompt": "计划执行时发现候选不满足必需条件，可以依据新证据修改后续任务。",
+      "explanation": "规划允许依据结果更新任务和依赖。",
+      "knowledgeIds": [
+        "planning"
+      ],
+      "reviewSectionIds": [
+        "planning-detail"
+      ],
+      "answer": true
+    },
+    {
+      "id": "team-consensus",
+      "type": "true_false",
+      "level": "辨析",
+      "prompt": "三个角色引用同一材料并得出一致结论，相当于完成了三次独立证据验证。",
+      "explanation": "共享错误来源会造成相关错误，一致不等于独立验证。",
+      "knowledgeIds": [
+        "multi-agent"
+      ],
+      "reviewSectionIds": [
+        "multi-agent-detail"
+      ],
+      "answer": false
+    },
+    {
+      "id": "tool-execution",
+      "type": "single_choice",
+      "level": "辨析",
+      "prompt": "模型输出了搜索工具名和参数，接下来哪一步才能获得真实搜索结果？",
+      "explanation": "选择直接解决任务缺口且有证据支持的行动。",
+      "knowledgeIds": [
+        "tools"
+      ],
+      "reviewSectionIds": [
+        "tools-detail"
+      ],
+      "options": [
+        {
+          "id": "a",
+          "text": "应用校验参数并实际执行工具",
+          "explanation": "模型输出只是调用请求。"
+        },
+        {
+          "id": "b",
+          "text": "直接把“已搜索”写进报告",
+          "explanation": "没有实际结果支持。"
+        },
+        {
+          "id": "c",
+          "text": "让模型再复述一次参数",
+          "explanation": "复述不能执行工具。"
+        }
+      ],
+      "answer": "a"
+    },
+    {
+      "id": "react-missing",
+      "type": "single_choice",
+      "level": "辨析",
+      "prompt": "查到某产品价格需联系销售，当前无公开报价，合理的下一步是什么？",
+      "explanation": "选择直接解决任务缺口且有证据支持的行动。",
+      "knowledgeIds": [
+        "react"
+      ],
+      "reviewSectionIds": [
+        "react-detail"
+      ],
+      "options": [
+        {
+          "id": "a",
+          "text": "沿用估计价格并写成正式报价",
+          "explanation": "缺少事实依据。"
+        },
+        {
+          "id": "b",
+          "text": "调整查询并保留未知项，必要时报告比较限制",
+          "explanation": "利用观察调整后续行动。"
+        },
+        {
+          "id": "c",
+          "text": "不断原样重试同一查询",
+          "explanation": "没有针对观察改变策略。"
+        }
+      ],
+      "answer": "b"
+    },
+    {
+      "id": "reflection-focus",
+      "type": "single_choice",
+      "level": "辨析",
+      "prompt": "报告把月费与年费直接比较，最有针对性的修订是什么？",
+      "explanation": "选择直接解决任务缺口且有证据支持的行动。",
+      "knowledgeIds": [
+        "reflection"
+      ],
+      "reviewSectionIds": [
+        "reflection-detail"
+      ],
+      "options": [
+        {
+          "id": "a",
+          "text": "增加形容词使结论更有说服力",
+          "explanation": "没有修正口径。"
+        },
+        {
+          "id": "b",
+          "text": "增加一个同意结论的角色",
+          "explanation": "同意不是证据。"
+        },
+        {
+          "id": "c",
+          "text": "统一计费周期并依据数据重算",
+          "explanation": "直接修复审阅发现的问题。"
+        }
+      ],
+      "answer": "c"
+    },
+    {
+      "id": "compose-small",
+      "type": "single_choice",
+      "level": "辨析",
+      "prompt": "一个信息齐全且简单的查询，应如何选择架构？",
+      "explanation": "选择直接解决任务缺口且有证据支持的行动。",
+      "knowledgeIds": [
+        "composition"
+      ],
+      "reviewSectionIds": [
+        "composition-detail"
+      ],
+      "options": [
+        {
+          "id": "a",
+          "text": "先用简单实现，按实际缺口增加模式",
+          "explanation": "成本与任务收益需要匹配。"
+        },
+        {
+          "id": "b",
+          "text": "五种模式都启用以确保可靠",
+          "explanation": "模式数量不能保证质量。"
+        },
+        {
+          "id": "c",
+          "text": "固定增加三轮反思",
+          "explanation": "未证明额外轮数有收益。"
+        }
+      ],
+      "answer": "a"
+    },
+    {
+      "id": "plan-dependencies",
+      "type": "short_answer",
+      "level": "应用",
+      "prompt": "为三种方案做同口径比较，说明一组可并行任务和一项必须等待的任务，并说明何时重规划。",
+      "explanation": "以下评分点为必需内容；具体工具名称和角色命名属于补充，不影响得分。",
+      "knowledgeIds": [
+        "planning"
+      ],
+      "reviewSectionIds": [
+        "planning-detail"
+      ],
+      "referenceAnswer": "三个候选的独立资料收集可并行；最终比较等待资料收集和单位统一；候选不满足约束等新证据出现时重规划。",
+      "rubric": [
+        {
+          "id": "r1",
+          "text": "三个候选的独立资料收集可并行",
+          "points": 1
+        },
+        {
+          "id": "r2",
+          "text": "最终比较等待资料收集和单位统一",
+          "points": 1
+        },
+        {
+          "id": "r3",
+          "text": "候选不满足约束等新证据出现时重规划",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "team-handoff",
+      "type": "short_answer",
+      "level": "应用",
+      "prompt": "将调研交给多个角色时，应怎样设计交接和最终核验？",
+      "explanation": "以下评分点为必需内容；具体工具名称和角色命名属于补充，不影响得分。",
+      "knowledgeIds": [
+        "multi-agent"
+      ],
+      "reviewSectionIds": [
+        "multi-agent-detail"
+      ],
+      "referenceAnswer": "交接统一指标、来源、日期和未知项；协调者检查口径、完整性并处理冲突；审阅结论与来源，不把多角色一致当独立证明。",
+      "rubric": [
+        {
+          "id": "r1",
+          "text": "交接统一指标、来源、日期和未知项",
+          "points": 1
+        },
+        {
+          "id": "r2",
+          "text": "协调者检查口径、完整性并处理冲突",
+          "points": 1
+        },
+        {
+          "id": "r3",
+          "text": "审阅结论与来源，不把多角色一致当独立证明",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "bounded-loop",
+      "type": "short_answer",
+      "level": "应用",
+      "prompt": "伪代码执行六轮后退出但仍缺少关键来源，应怎样交付，并用哪些指标评价是否需要增加复杂模式？",
+      "explanation": "以下评分点为必需内容；具体工具名称和角色命名属于补充，不影响得分。",
+      "knowledgeIds": [
+        "composition"
+      ],
+      "reviewSectionIds": [
+        "composition-detail"
+      ],
+      "referenceAnswer": "退出不等于完成，明确缺失来源和未满足条件；保留已有证据并报告结果限制；结合错误数或来源覆盖以及耗时、调用成本和简单基线比较。",
+      "rubric": [
+        {
+          "id": "r1",
+          "text": "退出不等于完成，明确缺失来源和未满足条件",
+          "points": 1
+        },
+        {
+          "id": "r2",
+          "text": "保留已有证据并报告结果限制",
+          "points": 1
+        },
+        {
+          "id": "r3",
+          "text": "结合错误数或来源覆盖以及耗时、调用成本和简单基线比较",
+          "points": 1
+        }
+      ]
+    }
+  ]
+}

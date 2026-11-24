@@ -1,0 +1,195 @@
+{
+  "id": "note-dc64149287",
+  "title": "Agent 工作流五种模式：从工具调用到规划与协作",
+  "category": "Agent 开发",
+  "summary": "Agent 工作流通过反馈、工具和任务组织，把一次生成扩展为可调整的执行过程。理解反思、工具使用、ReAct、规划和多 Agent 的职责与代价，才能按任务需要组合它们。",
+  "tags": [
+    "Agent",
+    "工作流",
+    "ReAct",
+    "工具调用",
+    "多智能体"
+  ],
+  "points": [
+    {
+      "id": "feedback",
+      "title": "工作流的关键是反馈",
+      "body": "行动结果应影响下一步；调用次数多并不自动意味着质量高。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/089ef6bc6815.jpg",
+          "alt": "五种工作流的总览：反思、工具、ReAct、规划与多 Agent",
+          "caption": "原文配图｜ByteByteGo：工作流的关键是反馈",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns"
+        }
+      ]
+    },
+    {
+      "id": "reflection",
+      "title": "反思：检查产物并修订",
+      "body": "按明确标准审阅已有结果，再修订；自评不能代替事实验证。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/4b6dc23bd40a.jpg",
+          "alt": "生成初稿、反思与修订的循环",
+          "caption": "原文配图｜ByteByteGo：反思：检查产物并修订",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "title": "工具使用：接入外部能力",
+      "body": "工具提供检索、计算与系统操作；模型提出调用，应用负责执行。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/f769a292cf8f.jpg",
+          "alt": "模型连接搜索、向量数据库和 API 获取结果",
+          "caption": "原文配图｜ByteByteGo：工具使用：接入外部能力",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns"
+        }
+      ]
+    },
+    {
+      "id": "react",
+      "title": "ReAct：用观察调整下一步",
+      "body": "围绕当前状态选择行动，再读取真实结果，更新后续决策。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/77ad41df29da.jpg",
+          "alt": "模型在工具交互中进行决策并生成回答",
+          "caption": "原文配图｜ByteByteGo：ReAct：用观察调整下一步",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns"
+        }
+      ]
+    },
+    {
+      "id": "planning",
+      "title": "规划：管理目标、依赖和资源",
+      "body": "先拆解任务并识别依赖；执行遇到新信息时允许重规划。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/5e8e81500614.jpg",
+          "alt": "规划生成任务，执行结果反馈至重新规划",
+          "caption": "原文配图｜ByteByteGo：规划：管理目标、依赖和资源",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns"
+        }
+      ]
+    },
+    {
+      "id": "multi-agent",
+      "title": "多 Agent：用分工换取协调成本",
+      "body": "专家、审阅者与协调者各司其职；必须明确交接格式与责任。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/b12338749d52.jpg",
+          "alt": "多个 Agent 通过双向消息交互协作",
+          "caption": "原文配图｜ByteByteGo：多 Agent：用分工换取协调成本",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns"
+        }
+      ]
+    },
+    {
+      "id": "composition",
+      "title": "组合与验收：只加入解决实际问题的模式",
+      "body": "依据任务缺口选择模式，用质量、耗时和成本共同评估。"
+    }
+  ],
+  "images": [],
+  "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns",
+  "sourceTitle": "Top AI Agentic Workflow Patterns",
+  "assessmentRequired": true,
+  "created": "2026-11-24T14:30:34.264Z",
+  "updated": "2026-11-24T14:30:34.264Z",
+  "explanations": [
+    {
+      "id": "feedback-detail",
+      "title": "工作流的关键是反馈",
+      "body": "原文导读：文章把复杂任务拆成可反馈的过程，介绍五种可组合模式。本笔记按“缺什么能力、如何补上、如何验收”组织；下面的采购调研案例、实现建议与自测均为自拟补充，并非原文实验结论。\n\n自拟贯穿案例：为团队比较三种文档检索方案，输出有来源的比较报告。一次生成可能缺少最新材料，也无法确认计算是否正确。可先约定验收条件：三种方案采用相同指标、关键结论能追溯出处、缺失信息明确标记，再决定需要哪些步骤。\n\n反馈是把观察到的结果用于下一步决策。例如发现某方案缺少价格资料，就补查官方说明，或在报告中保留未知项。把相同提示重复十次却不读取失败原因，并没有形成有效改进。增加循环会增加延迟与成本，简单且信息齐全的问题可以直接回答。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/089ef6bc6815.jpg",
+          "alt": "五种工作流的总览：反思、工具、ReAct、规划与多 Agent",
+          "caption": "原文配图｜ByteByteGo：工作流的关键是反馈",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns",
+          "afterParagraph": 2
+        }
+      ]
+    },
+    {
+      "id": "reflection-detail",
+      "title": "反思：检查产物并修订",
+      "body": "反思关注已有产物的质量：先形成草稿，再检查具体缺陷，最后据此修改。它适合表达、结构与代码等需要审阅的任务；检查可以聚焦准确性、清晰度、语气或缺陷，而不是笼统要求“再想一遍”。\n\n自拟案例：报告草稿写出“方案甲最便宜”，审阅时要求检查比较口径与来源日期。若发现甲按月收费、乙按年报价，就应统一口径后再比较；修改依据应是查到的数据，而不是另一段更肯定的描述。\n\n工程补充：把审阅结果写成问题清单，每项记录位置、依据和修复建议。事实检查接入来源，代码检查接入测试；同一个模型可能重复同一错误，模型说“通过”不是正确性的证明。设置最多修订轮数，预算耗尽仍有问题时明确保留限制。对于低风险且极短的查询，额外审阅的延迟可能不值得。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/4b6dc23bd40a.jpg",
+          "alt": "生成初稿、反思与修订的循环",
+          "caption": "原文配图｜ByteByteGo：反思：检查产物并修订",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns",
+          "afterParagraph": 2
+        }
+      ]
+    },
+    {
+      "id": "tools-detail",
+      "title": "工具使用：接入外部能力",
+      "body": "工具弥补语言生成之外的能力缺口：检索提供外部材料，计算器处理精确运算，接口读取业务数据。原文强调根据任务选择工具，并能在结果不充分时调整调用方式。工具使用描述的是能力连接方式，本身不要求复杂的多轮规划。\n\n工程补充：一次调用通常经历选择工具、生成参数、应用校验并执行、返回结果、模型利用结果。模型写出“搜索完成”不能证明搜索真的发生。搜索返回的材料也可能过时或与问题无关，必须核对内容与来源，而不能把工具输出当成天然真相。\n\n自拟案例：用搜索查产品说明，用程序统一计费单位，再把结果交给写作步骤。工具失败时区分参数错误、权限不足与暂时超时；调整参数或报告限制比无条件重试更合理。工具越多，选择与维护负担越大，应先提供完成任务所需的最小集合。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/f769a292cf8f.jpg",
+          "alt": "模型连接搜索、向量数据库和 API 获取结果",
+          "caption": "原文配图｜ByteByteGo：工具使用：接入外部能力",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns",
+          "afterParagraph": 2
+        }
+      ]
+    },
+    {
+      "id": "react-detail",
+      "title": "ReAct：用观察调整下一步",
+      "body": "ReAct 将决策与行动交替组织：判断目前缺少什么，执行一个合适动作，观察返回结果，再决定继续、换方法或结束。与一次性列好全部动作相比，它适合信息需要逐步发现的任务。与只接入工具相比，它更强调结果如何改变控制流程。\n\n自拟案例：先查询方案甲的计费页面，发现价格需要联系销售；下一步可以查询公开套餐范围，并标注无法完成精确价格对比，而不是凭空补一个数字。若观察不到关键字段，就不能假设先前目标已经达成。\n\n工程补充：运行记录保留工具名、参数摘要、结果、状态变化及简短决策依据即可，不必要求模型暴露完整内部思维过程。为循环设置轮数、时间与费用上限，遇到重复无进展调用及时终止。ReAct 的价值是根据证据调整行动，不是产生很长的推理文本。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/77ad41df29da.jpg",
+          "alt": "模型在工具交互中进行决策并生成回答",
+          "caption": "原文配图｜ByteByteGo：ReAct：用观察调整下一步",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns",
+          "afterParagraph": 2
+        }
+      ]
+    },
+    {
+      "id": "planning-detail",
+      "title": "规划：管理目标、依赖和资源",
+      "body": "规划先明确成功条件，再拆出可执行子任务，标记输入、产出和依赖。例如先确定比较指标，再收集各方案资料，最后才能做同口径比较。不同方案的独立资料收集可能并行，但最终比较依赖这些资料，不能任意同时开始。\n\n自拟案例：计划包含确定指标、分别调研、统一单位、写报告和核验结论。执行中发现一个候选不支持必需功能，可以调整候选列表，并重新评估依赖它的比较工作。重规划应基于观察到的变化，而不是每轮都从头重写任务列表。\n\n工程补充：规划解决全局顺序与资源协调，ReAct 解决局部探索，两者可以嵌套。阶段多、返工代价高、存在预算约束时规划更有价值。对于简单线性任务，正式计划会增加开销；高度不确定时，应先安排少量探查，再细化后续工作，避免把尚未验证的假设写成固定长计划。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/5e8e81500614.jpg",
+          "alt": "规划生成任务，执行结果反馈至重新规划",
+          "caption": "原文配图｜ByteByteGo：规划：管理目标、依赖和资源",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns",
+          "afterParagraph": 2
+        }
+      ]
+    },
+    {
+      "id": "multi-agent-detail",
+      "title": "多 Agent：用分工换取协调成本",
+      "body": "多 Agent 让不同角色承担不同任务：研究者收集证据，分析者处理数据，审阅者检查产物，协调者分派任务并合并结果。专业化可以帮助隔离目标和上下文，但角色名称本身不会产生专业能力，也不要求每个角色使用不同模型。\n\n自拟案例：三个调研角色各查一个候选，输出相同字段：指标、证据链接、日期和未知项。协调者先检查字段完整性和口径，再交给审阅角色检查结论。若两个角色引用同一份错误材料，它们意见一致也不构成独立验证。\n\n工程补充：协作需要清晰消息协议、冲突处理、失败恢复和最终责任人。多角色会增加调用成本与沟通开销，故障也可能出现在交接处。先用单 Agent 建立基线；只有任务能合理拆分、需要不同视角，且收益覆盖协调成本时再增加角色。",
+      "illustrations": [
+        {
+          "src": "assets/note-dc64149287/b12338749d52.jpg",
+          "alt": "多个 Agent 通过双向消息交互协作",
+          "caption": "原文配图｜ByteByteGo：多 Agent：用分工换取协调成本",
+          "source": "https://blog.bytebytego.com/p/top-ai-agentic-workflow-patterns",
+          "afterParagraph": 2
+        }
+      ]
+    },
+    {
+      "id": "composition-detail",
+      "title": "组合与验收：只加入解决实际问题的模式",
+      "body": "五种模式不是互斥的产品等级。自拟调研流程可以由规划安排阶段，用工具获取材料，在检索阶段采用 ReAct 调整查询，在交付前反思并修订；只有多个独立调研分支确实有收益时才加入多 Agent。\n\n工程补充：先保留一个简单实现作为基线，再分别比较事实错误数、来源覆盖、任务完成率、耗时和调用成本。任务完成不是“模型宣布结束”，而是满足事先约定的验收标准。若缺少关键证据，报告应说明未完成的部分。\n\n自拟最小控制流程如下，是伪代码而非可直接运行的 SDK 示例。它展示的是边界与观察如何进入循环；参数校验、权限与错误分类需在实际运行时实现。\n\n```python\nstate = initial_state(goal)\nfor step in range(6):\n    if meets_acceptance_criteria(state):\n        break\n    action = choose_next_action(state)\n    result = execute_validated_action(action)\n    state = update_with_observation(state, result)\nreport = summarize_result_and_gaps(state)\n```\n\n固定轮数只是防止无限运行，不保证成功。达到上限后仍应生成带缺口的状态说明，不能把退出循环等同于任务已经完成。"
+    }
+  ]
+}
