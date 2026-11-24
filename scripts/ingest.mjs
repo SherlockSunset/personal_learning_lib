@@ -33,7 +33,7 @@ export async function ingest(input,{keepImages=true,base=root}={}){
  const digest=createHash('sha256').update(data).digest('hex').slice(0,12);const rel='assets/'+id+'/'+digest+ext;await fs.mkdir(path.join(folder,'assets'),{recursive:true});await fs.writeFile(path.join(folder,'assets',digest+ext),data);images.push(rel);for(const im of imageDetails.filter(x=>x.ref===ref)){im.localPath=rel;im.source=remote?new URL(ref,source).href:/^https?:\/\//i.test(ref)?ref:'';}
  }catch(e){warnings.push('图片 '+(i+1)+'：'+e.message);for(const im of imageDetails.filter(x=>x.ref===ref))im.error=e.message;}}
  if(keepImages&&new Set(imageRefs).size>24)warnings.push('正文超过 24 张图片，本次只抓取前 24 张；其余需按需补充。');
- const now=new Date().toISOString();let draft={id,title:title||'待 Codex 总结的文章',category:'Agent 开发',summary:'',tags:[],points:[],images,source,sourceTitle:title,created:now,updated:now};await fs.writeFile(path.join(folder,'source.txt'),text);
+ const now=new Date().toISOString();let draft={id,title:title||'待 Codex 总结的文章',category:'Agent 开发',summary:'',tags:[],points:[],images,source,sourceTitle:title,assessmentRequired:true,created:now,updated:now};await fs.writeFile(path.join(folder,'source.txt'),text);
  try{await fs.writeFile(path.join(folder,'draft.json'),JSON.stringify(draft,null,2)+'\n',{flag:'wx'});}catch(e){if(e.code!=='EEXIST')throw e;draft=JSON.parse(await fs.readFile(path.join(folder,'draft.json'),'utf8'));warnings.push('同一原文草稿已存在，保留已有编辑内容；需要新增配图时请在现有草稿中补充。');}
  await fs.writeFile(path.join(folder,'metadata.json'),JSON.stringify({source,originalFile:file,title,imageRefs,imageDetails,warnings},null,2)+'\n');return {folder,draft,imageDetails,warnings};
 }
