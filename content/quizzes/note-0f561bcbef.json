@@ -1,0 +1,224 @@
+{
+  "noteId": "note-0f561bcbef",
+  "version": 1,
+  "questions": [
+    {
+      "id": "delta-context",
+      "type": "true_false",
+      "level": "辨析",
+      "prompt": "使用增量请求只发送新工具结果后，模型就无需再参考此前的任务和历史信息。",
+      "answer": false,
+      "explanation": "增量请求减少的是重复传输。服务端仍需要根据已有状态组织模型所需上下文；网络上传了多少内容，不等于模型需要参考多少内容。",
+      "knowledgeIds": ["incremental-state"],
+      "reviewSectionIds": ["connection-delta", "state-layers"]
+    },
+    {
+      "id": "prefix-semantic",
+      "type": "true_false",
+      "level": "辨析",
+      "prompt": "只要两轮提示词表达的意思相同，即使前部文本和工具顺序改变，也一定能够复用前缀缓存。",
+      "answer": false,
+      "explanation": "语义相近不能保证可复用前缀匹配。需要保持相关输入和顺序稳定，并结合实际模型规则与 cached_tokens 等指标验证；不能宣称一定命中。",
+      "knowledgeIds": ["stable-prefix"],
+      "reviewSectionIds": ["prefix-caching"]
+    },
+    {
+      "id": "harness-executes",
+      "type": "true_false",
+      "level": "理解",
+      "prompt": "模型输出“调用测试工具”与测试工具已经运行是两个不同状态；应用需要执行调用并把结果记入后续会话。",
+      "answer": true,
+      "explanation": "模型提出结构化调用，Harness 或应用运行时负责校验、执行和记录结果。只有工具实际运行并返回结果，模型才有依据判断下一步。",
+      "knowledgeIds": ["harness"],
+      "reviewSectionIds": ["harness-loop"]
+    },
+    {
+      "id": "delta-complexity",
+      "type": "true_false",
+      "level": "辨析",
+      "prompt": "复用此前分词结果后，后续每次请求的处理成本都恒定，与本轮新增工具结果的长度无关。",
+      "answer": false,
+      "explanation": "新增内容仍需要处理。增量机制减少重复工作，不会消除新增输入长度、输出长度和其他阶段的成本；不能直接宣称后续请求恒为 O(1)。",
+      "knowledgeIds": ["api-processing"],
+      "reviewSectionIds": ["delta-complexity", "api-pipeline"]
+    },
+    {
+      "id": "speculation-verification",
+      "type": "true_false",
+      "level": "理解",
+      "prompt": "详解介绍的推测采样算法需要目标模型对草稿候选进行验证并执行相应的接受与修正，不能把未经验证的小模型输出直接当作最终结果。",
+      "answer": true,
+      "explanation": "提速来自草稿与批量验证的协作。分布保持的结论依赖具体采样算法，不能泛化成任意“先猜再检查”都无损。",
+      "knowledgeIds": ["speculative-decoding"],
+      "reviewSectionIds": ["speculative-sampling"]
+    },
+    {
+      "id": "routing-tradeoff",
+      "type": "true_false",
+      "level": "理解",
+      "prompt": "推理请求路由需要同时权衡排队和缓存复用，缓存命中率最高的节点不一定给出最短的总等待时间。",
+      "answer": true,
+      "explanation": "忙碌节点可能已有状态，空闲节点可能需要重算。必须一起考虑排队、计算及其他开销，不能只追求单一指标。",
+      "knowledgeIds": ["inference-serving"],
+      "reviewSectionIds": ["cache-routing"]
+    },
+    {
+      "id": "three-layers",
+      "type": "single_choice",
+      "level": "理解",
+      "prompt": "哪一组职责划分最符合文章的三层架构？",
+      "options": [
+        {"id":"a","text":"Harness 负责 GPU 调度，API 负责修改代码，推理层负责维护用户界面。","explanation":"混淆了执行编排、请求处理与模型计算，界面也不是推理层的职责。"},
+        {"id":"b","text":"三层都只做文本拼接，不参与工具执行或模型计算。","explanation":"遗漏了实际工具执行以及模型推理这一核心职责。"},
+        {"id":"c","text":"Harness 编排上下文和工具，API 处理请求，推理层执行模型计算。","explanation":"这一划分对应应用循环、请求处理和模型执行三个不同层面。"},
+        {"id":"d","text":"API 自动理解业务目标，所以不再需要 Harness。","explanation":"请求处理不能代替应用对工具、状态与任务循环的编排。"}
+      ],
+      "answer": "c",
+      "explanation": "这种划分用于定位职责与瓶颈，并不要求小项目一定部署三个独立服务。",
+      "knowledgeIds": ["architecture"],
+      "reviewSectionIds": ["agent-loop"]
+    },
+    {
+      "id": "deferred-tools",
+      "type": "single_choice",
+      "level": "应用",
+      "prompt": "Agent 接入了很多系统，本次任务只需要查询订单。哪种工具提供方式最合理？",
+      "options": [
+        {"id":"a","text":"提供清楚的能力目录，按需加载订单工具的详细参数定义。","explanation":"保留发现能力所需信息，同时避免无关完整定义挤占上下文。"},
+        {"id":"b","text":"把所有系统的完整工具定义都放在每轮请求最前面。","explanation":"会增加无关输入；每轮都提前放入不是按需发现。"},
+        {"id":"c","text":"完全不提供任何名称或描述，让模型自行猜测工具。","explanation":"缺少可发现信息，模型无法可靠选出正确能力。"},
+        {"id":"d","text":"把所有工具描述改成“处理数据”，这样就不会选错。","explanation":"描述失去区分度，反而不利于发现与正确使用。"}
+      ],
+      "answer": "a",
+      "explanation": "按需加载应兼顾可发现性与输入规模。工具少的小项目可以先写清楚定义，无需为形式引入复杂检索。",
+      "knowledgeIds": ["tool-discovery"],
+      "reviewSectionIds": ["tool-search"]
+    },
+    {
+      "id": "parallel-code",
+      "type": "single_choice",
+      "level": "应用",
+      "prompt": "以下哪个场景最适合用程序化工具调用并行收集结果，再由代码过滤汇总？",
+      "options": [
+        {"id":"a","text":"先修改文件，再立即并行执行依赖修改结果的补丁决策。","explanation":"后续决策依赖前面的实际结果，不能当作独立步骤随意并行。"},
+        {"id":"b","text":"每一步都需要阅读新证据并重新判断的开放式调查。","explanation":"这类步骤需要持续的语义判断，不能预先当成完全机械流程。"},
+        {"id":"c","text":"多个操作同时写同一个文件，且没有冲突控制。","explanation":"存在资源冲突，缺少协调时不能因为追求速度而直接并发。"},
+        {"id":"d","text":"独立读取三个模块的测试结果，然后筛出失败用例名。","explanation":"读取相互独立，过滤规则确定，适合程序协调和压缩中间结果。"}
+      ],
+      "answer": "d",
+      "explanation": "关键是操作之间没有依赖或写入冲突，并且汇总规则可以用代码确定表达。权限、超时和错误仍需处理。",
+      "knowledgeIds": ["code-mode"],
+      "reviewSectionIds": ["programmatic-tools"]
+    },
+    {
+      "id": "routing-numbers",
+      "type": "single_choice",
+      "level": "应用",
+      "prompt": "忽略其他开销：A 节点排队 80 ms，缓存复用后的计算 20 ms；B 无需排队，重算需要 150 ms。应选哪个？",
+      "options": [
+        {"id":"a","text":"B，因为无需排队，所以总时间一定更少。","explanation":"只看排队而忽略重算，B 的总时间仍为 150 ms。"},
+        {"id":"b","text":"A，因为 80 + 20 = 100 ms，小于 B 的 150 ms。","explanation":"按题设合计排队与计算，A 的预计总时间更少。"},
+        {"id":"c","text":"A，而且无论其排队如何增长，都应该固定选择 A。","explanation":"A 的队列增长后可能更慢，不能把一次计算结果推广为固定规则。"},
+        {"id":"d","text":"两者相同，因为路由不影响重算成本。","explanation":"题设已经给出不同的缓存与重算条件，不能忽略。"}
+      ],
+      "answer": "b",
+      "explanation": "100 ms 与 150 ms 是题设简化条件下的比较。真实路由还需考虑网络、容量等因素。",
+      "knowledgeIds": ["inference-serving"],
+      "reviewSectionIds": ["cache-routing"]
+    },
+    {
+      "id": "prefill-decode-metrics",
+      "type": "single_choice",
+      "level": "理解",
+      "prompt": "哪项关于 Prefill、Decode 及其评估的说法最准确？",
+      "options": [
+        {"id":"a","text":"首 token 出现得快，就能保证整个 Agent 任务很快完成。","explanation":"后续生成、工具调用与重试仍可能耗时。"},
+        {"id":"b","text":"两个阶段拆开部署后一定更快，不需要考虑网络带宽。","explanation":"分离会引入状态传输和调度成本，必须一起评估。"},
+        {"id":"c","text":"Prefill 处理已有输入，Decode 继续生成；TTFT、TPOT 与任务总耗时应分别观察。","explanation":"分清阶段和指标，才能判断具体的等待来自哪里。"},
+        {"id":"d","text":"两个阶段的瓶颈与输入、并发和硬件无关。","explanation":"实际瓶颈会随这些条件而变化。"}
+      ],
+      "answer": "c",
+      "explanation": "阶段拆分是一种部署优化思路，是否有收益要用实际负载验证，不能由单一指标推断整个任务体验。",
+      "knowledgeIds": ["prefill-decode"],
+      "reviewSectionIds": ["prefill-decode-phases"]
+    },
+    {
+      "id": "successful-cost-math",
+      "type": "single_choice",
+      "level": "应用",
+      "prompt": "A 在一批任务中花费 10 元，成功 5 次；B 花费 12 元，成功 8 次。按成功任务平均成本比较，应如何判断？",
+      "options": [
+        {"id":"a","text":"A 更省，因为总费用 10 元低于 12 元。","explanation":"忽略了两批任务的成功数量不同。"},
+        {"id":"b","text":"两者相同，只要单次模型费用相同即可。","explanation":"成功率、失败与重试会影响每次成功摊销的成本。"},
+        {"id":"c","text":"无法比较，因为失败任务的费用不应纳入计算。","explanation":"这项指标恰恰需要计入整批任务消耗，包括失败和重试。"},
+        {"id":"d","text":"B 更省：A 为 2 元/成功任务，B 为 1.5 元/成功任务。","explanation":"分别用这批总费用除以成功次数，得到 10/5 与 12/8。"}
+      ],
+      "answer": "d",
+      "explanation": "单次调用便宜或总花费更低，都不能独立证明完成同类成功任务更经济。成功次数为零时应单独报告，不能除以零。",
+      "knowledgeIds": ["successful-task-cost"],
+      "reviewSectionIds": ["measurement"]
+    },
+    {
+      "id": "api-latency",
+      "type": "single_choice",
+      "level": "应用",
+      "prompt": "模型推理变快后，用户等待仍然明显。下一步最合理的排查方式是什么？",
+      "options": [
+        {"id":"a","text":"直接删除鉴权与格式校验来省时间。","explanation":"不能用移除必要边界来代替性能分析。"},
+        {"id":"b","text":"拆分检索、请求准备、模型、工具、重试和渲染耗时，再定位瓶颈。","explanation":"端到端拆分可发现模型之外的等待，依据证据选择优化点。"},
+        {"id":"c","text":"只比较模型名称，其他耗时不记录。","explanation":"无法解释请求准备或工具执行等阶段的延迟。"},
+        {"id":"d","text":"默认所有 CPU 机器性能相同，只增加相同标签的机器数量。","explanation":"标签相同并不保证硬件与负载一致，扩容也未必解决真实瓶颈。"}
+      ],
+      "answer": "b",
+      "explanation": "模型之外的请求处理和应用逻辑也影响体验。先测量实际阶段，必要检查仍须保留。",
+      "knowledgeIds": ["api-processing"],
+      "reviewSectionIds": ["api-pipeline", "measurement"]
+    },
+    {
+      "id": "cache-layers-explain",
+      "type": "short_answer",
+      "level": "辨析",
+      "prompt": "用自己的话区分对话记录、分词结果和 KV 缓存，并解释为什么只保存了对话文本，不代表 GPU 可以直接复用旧计算。",
+      "referenceAnswer": "对话记录保存消息和工具结果等业务事实；分词结果把文本表示为 token ID；KV 缓存保存模型处理输入产生的中间张量。它们属于不同处理层。保存文本有助于恢复输入，但仍可能需要分词和模型计算；GPU 上是否有可复用状态取决于缓存仍在、输入匹配等条件，不能由文本已保存直接推出。",
+      "rubric": [
+        {"id":"records","text":"说明对话记录保存消息、调用与结果等业务信息。","points":1},
+        {"id":"representations","text":"区分 token ID 分词结果与模型 Key/Value 中间张量。","points":1},
+        {"id":"reuse-boundary","text":"解释文本保存与 GPU 缓存可用是不同条件，仍可能发生转换或重算。","points":1}
+      ],
+      "explanation": "回答应体现处理层次的区别，而不只是列出三个名词。KV 状态占用内存，也会因淘汰等原因失去复用机会。",
+      "knowledgeIds": ["kv-cache"],
+      "reviewSectionIds": ["state-layers", "kv-memory"]
+    },
+    {
+      "id": "evaluation-design-explain",
+      "type": "short_answer",
+      "level": "应用",
+      "prompt": "你准备把 Agent 的几个独立查询改为并行执行。设计一个小实验，判断改动是否真正改善了任务表现，而不仅是某次调用更快。",
+      "referenceAnswer": "使用相同的一批代表性任务和明确成功标准，保留串行基线，仅改变查询并行这一主要因素。在两种方案上记录任务完成率、端到端耗时及 p50/p95、模型和工具调用、重试与总费用。把失败和重试纳入统计，必要时比较成功任务平均成本。确认操作无数据依赖或写入冲突，再根据速度、成本与正确性的共同变化判断是否保留改动。",
+      "rubric": [
+        {"id":"baseline","text":"使用同一组代表性任务、相同成功标准与改动前基线。","points":1},
+        {"id":"controlled-change","text":"检查操作是否独立，并控制一次主要改动因素。","points":1},
+        {"id":"end-to-end","text":"比较成功率和端到端耗时，观察分位数或慢请求而非只看单次调用。","points":1},
+        {"id":"failures-cost","text":"统计失败、重试和总成本，结合质量决定是否保留。","points":1}
+      ],
+      "explanation": "好的实验需要可比较的任务、可解释的变量和任务级结果。不能因为一轮请求变快，就忽略失败增多或其他阶段的额外等待。",
+      "knowledgeIds": ["evaluation-design"],
+      "reviewSectionIds": ["measurement", "programmatic-tools"]
+    },
+    {
+      "id": "harness-loop-explain",
+      "type": "short_answer",
+      "level": "应用",
+      "prompt": "模型已经请求执行测试，但测试工具返回失败。Harness 接下来应保存哪些信息、如何继续？你会给循环设置哪些边界？",
+      "referenceAnswer": "保存本次任务和工具调用标识、校验后的参数、实际执行结果及必要错误信息；将失败结果加入会话，让模型据此决定查看证据、修复或结束，不能把已请求调用当成执行成功。设置最大轮数、超时与重试次数，限制允许工具并保留权限边界，记录过程便于定位失败原因。",
+      "rubric": [
+        {"id":"record-result","text":"记录真实工具结果与必要调用信息，区分请求执行和执行成功。","points":1},
+        {"id":"continue-from-evidence","text":"把失败证据放回会话，由后续判断决定继续或结束。","points":1},
+        {"id":"bounds","text":"提出轮数、超时、重试或允许工具等具体边界，并保留执行约束。","points":1}
+      ],
+      "explanation": "循环应以实际结果驱动下一步，并有停止和失败处理策略。只写“继续让模型尝试”不足以说明一个可控的 Agent 系统。",
+      "knowledgeIds": ["harness"],
+      "reviewSectionIds": ["harness-loop", "agent-loop"]
+    }
+  ]
+}

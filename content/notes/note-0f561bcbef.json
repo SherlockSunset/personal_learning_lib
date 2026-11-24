@@ -42,7 +42,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "architecture",
+      "assessable": true
     },
     {
       "title": "Harness 层：四种优化抓手",
@@ -62,7 +64,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "harness",
+      "assessable": true
     },
     {
       "title": "API 层：减少模型之外的等待",
@@ -89,7 +93,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "api-processing",
+      "assessable": true
     },
     {
       "title": "推理层：四个关键词",
@@ -102,7 +108,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 1
         }
-      ]
+      ],
+      "id": "inference-serving",
+      "assessable": true
     },
     {
       "title": "增量传输，不等于模型忘记历史",
@@ -122,7 +130,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "incremental-state",
+      "assessable": true
     },
     {
       "title": "稳定前缀：把固定内容放前面",
@@ -135,7 +145,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "stable-prefix",
+      "assessable": true
     },
     {
       "title": "工具按需加载：先给目录，再给详情",
@@ -148,7 +160,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "tool-discovery",
+      "assessable": true
     },
     {
       "title": "Code Mode：让程序完成机械步骤",
@@ -161,7 +175,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "code-mode",
+      "assessable": true
     },
     {
       "title": "KV 缓存：算过的状态也会占显存",
@@ -174,7 +190,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "kv-cache",
+      "assessable": true
     },
     {
       "title": "推测解码：先草拟，再由目标模型验证",
@@ -187,7 +205,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 1
         }
-      ]
+      ],
+      "id": "speculative-decoding",
+      "assessable": true
     },
     {
       "title": "Prefill 与 Decode：读输入和写输出分开看",
@@ -200,7 +220,9 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "prefill-decode",
+      "assessable": true
     },
     {
       "title": "入门实践：先给循环记一笔账",
@@ -213,22 +235,28 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "successful-task-cost",
+      "assessable": true
     },
     {
       "title": "入门实践：一次只验证一个改动",
-      "body": "自拟实践顺序：\n1. 固定测试题和成功标准，保留基线。\n2. 稳定工具定义顺序和提示词前缀。\n3. 缩减不相关的工具定义、日志与工具输出。\n4. 对独立查询尝试并行，对机械汇总尝试代码处理。\n5. 对比成功率、总成本及延迟分位数，再决定是否保留。\n\n追问自己：慢在等待模型、执行工具，还是反复重试？减少上下文后是否漏掉证据？节省一次模型调用，是否引入了更多错误？这些问题比一开始更换推理引擎更贴近应用开发。"
+      "body": "自拟实践顺序：\n1. 固定测试题和成功标准，保留基线。\n2. 稳定工具定义顺序和提示词前缀。\n3. 缩减不相关的工具定义、日志与工具输出。\n4. 对独立查询尝试并行，对机械汇总尝试代码处理。\n5. 对比成功率、总成本及延迟分位数，再决定是否保留。\n\n追问自己：慢在等待模型、执行工具，还是反复重试？减少上下文后是否漏掉证据？节省一次模型调用，是否引入了更多错误？这些问题比一开始更换推理引擎更贴近应用开发。",
+      "id": "evaluation-design",
+      "assessable": true
     },
     {
       "title": "原文与延伸阅读",
-      "body": "ByteByteGo 原文发表于 2026-07-29。本页顶部和底部均提供原文链接，参考与延伸阅读列在正文之后。切换到“详细讲解”，可结合连续案例学习各层优化原理。"
+      "body": "ByteByteGo 原文发表于 2026-07-29。本页顶部和底部均提供原文链接，参考与延伸阅读列在正文之后。切换到“详细讲解”，可结合连续案例学习各层优化原理。",
+      "id": "reading-sources",
+      "assessable": false
     }
   ],
   "images": [],
   "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
   "sourceTitle": "How ChatGPT Optimizes its Agent Loop: Harness, API, and Inference",
   "created": "2026-11-24T10:16:26.383Z",
-  "updated": "2026-11-24T11:25:50.571Z",
+  "updated": "2026-11-24T13:18:28.130Z",
   "explanations": [
     {
       "title": "原文配图导读：先定位优化发生在哪里",
@@ -241,7 +269,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 1
         }
-      ]
+      ],
+      "id": "overview-map"
     },
     {
       "title": "从一次修复任务看懂 Agent 循环",
@@ -268,7 +297,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 4
         }
-      ]
+      ],
+      "id": "agent-loop"
     },
     {
       "title": "配合原图理解 Harness 的职责",
@@ -288,11 +318,13 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 3
         }
-      ]
+      ],
+      "id": "harness-loop"
     },
     {
       "title": "先分清传输、分词、计算与记忆",
-      "body": "“缓存”和“上下文”很容易被混为一谈。先看四种不同的东西。\n\n第一种是对话记录：用户说了什么、模型请求了什么工具、工具返回了什么。它是业务层保存的事实记录。第二种是请求传输：本次通过网络发送哪些字节。第三种是分词结果：把文本表示成模型可处理的 token ID 序列。第四种是 KV 状态：模型处理输入时产生、可供后续注意力计算使用的张量。\n\n同一份历史可以在某一层被复用，在另一层仍有开销。比如只通过网络发送新工具结果，并不意味着模型不再需要旧任务信息；服务端只是借助已有记录恢复输入。保存了 token ID 也不意味着 GPU 上仍留着对应的 KV 状态。\n\n自拟类比：你和同事共同编辑文档，只发送改动，是传输优化；对方不再重新解析没改过的段落，是处理优化；复用之前计算出的分析结果，是计算优化。三者可以一起发生，但没有任何一个天然保证另外两个成立。遇到性能问题时，要具体问“哪一层复用了什么”。"
+      "body": "“缓存”和“上下文”很容易被混为一谈。先看四种不同的东西。\n\n第一种是对话记录：用户说了什么、模型请求了什么工具、工具返回了什么。它是业务层保存的事实记录。第二种是请求传输：本次通过网络发送哪些字节。第三种是分词结果：把文本表示成模型可处理的 token ID 序列。第四种是 KV 状态：模型处理输入时产生、可供后续注意力计算使用的张量。\n\n同一份历史可以在某一层被复用，在另一层仍有开销。比如只通过网络发送新工具结果，并不意味着模型不再需要旧任务信息；服务端只是借助已有记录恢复输入。保存了 token ID 也不意味着 GPU 上仍留着对应的 KV 状态。\n\n自拟类比：你和同事共同编辑文档，只发送改动，是传输优化；对方不再重新解析没改过的段落，是处理优化；复用之前计算出的分析结果，是计算优化。三者可以一起发生，但没有任何一个天然保证另外两个成立。遇到性能问题时，要具体问“哪一层复用了什么”。",
+      "id": "state-layers"
     },
     {
       "title": "连接复用与增量请求各解决什么",
@@ -312,7 +344,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "connection-delta"
     },
     {
       "title": "稳定前缀为什么比“意思相同”更重要",
@@ -325,7 +358,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "prefix-caching"
     },
     {
       "title": "工具多了，为什么先给目录更合适",
@@ -338,7 +372,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "tool-search"
     },
     {
       "title": "Code Mode：把可确定的步骤交给程序",
@@ -351,7 +386,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "programmatic-tools"
     },
     {
       "title": "理解增量处理的收益与复杂度",
@@ -364,7 +400,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "delta-complexity"
     },
     {
       "title": "API 优化不能只盯着 GPU",
@@ -384,7 +421,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "api-pipeline"
     },
     {
       "title": "缓存路由：少排队和少重算如何权衡",
@@ -397,7 +435,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "cache-routing"
     },
     {
       "title": "KV 缓存：复用计算也需要付出存储代价",
@@ -417,7 +456,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 3
         }
-      ]
+      ],
+      "id": "kv-memory"
     },
     {
       "title": "推测解码：为什么先猜一段可能更快",
@@ -430,15 +470,18 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 2
         }
-      ]
+      ],
+      "id": "speculative-sampling"
     },
     {
       "title": "Prefill/Decode 分离：为什么读和写要分开看",
-      "body": "把一次生成想成“处理现有输入”和“接着产生输出”两个阶段。Prefill 处理输入并建立相应状态；Decode 在此基础上继续生成。前者和后者的工作形态不同，争用同一组资源时可能相互影响。\n\nDistServe 研究将两阶段分配到不同 GPU，分别配置资源与并行方式，同时考虑分离后传输状态所需的带宽。这说明优化不只是“拆成两个服务”，还要把数据移动和资源分配一起计算。\n\n测量时区分 TTFT 与 TPOT：TTFT 看等待首个输出的时间，TPOT 关注输出阶段每个 token 的耗时；它们都不能独立代替用户任务的总完成时间。自拟例子：首字 0.2 秒出现，但全文要 30 秒，和首字 1 秒出现、全文 5 秒完成，是两种不同体验。\n\n瓶颈会随输入长度、并发、模型与硬件而变化。不要把“Prefill 一定只受算力限制、Decode 一定只受带宽限制”当成永远成立的判断。先理解常见倾向，再通过实际负载验证。"
+      "body": "把一次生成想成“处理现有输入”和“接着产生输出”两个阶段。Prefill 处理输入并建立相应状态；Decode 在此基础上继续生成。前者和后者的工作形态不同，争用同一组资源时可能相互影响。\n\nDistServe 研究将两阶段分配到不同 GPU，分别配置资源与并行方式，同时考虑分离后传输状态所需的带宽。这说明优化不只是“拆成两个服务”，还要把数据移动和资源分配一起计算。\n\n测量时区分 TTFT 与 TPOT：TTFT 看等待首个输出的时间，TPOT 关注输出阶段每个 token 的耗时；它们都不能独立代替用户任务的总完成时间。自拟例子：首字 0.2 秒出现，但全文要 30 秒，和首字 1 秒出现、全文 5 秒完成，是两种不同体验。\n\n瓶颈会随输入长度、并发、模型与硬件而变化。不要把“Prefill 一定只受算力限制、Decode 一定只受带宽限制”当成永远成立的判断。先理解常见倾向，再通过实际负载验证。",
+      "id": "prefill-decode-phases"
     },
     {
       "title": "把优化做成一个可比较的实验",
-      "body": "回到开头的修复任务，先准备一组有明确通过条件的案例，例如“指定测试通过，且没有破坏已有功能”。在同一组案例上比较改动前后，记录成功率、总费用、模型请求次数、工具耗时、重试和最终完成时间。\n\nOpenAI 的延迟优化资料建议从用户真正等待的地方开始测量，并观察代表性流量上的 p50、p95。p50 接近中间水平，p95 用来观察较慢的一端；少量顺利样例不能代表真实体验。\n\n自拟记录格式可以是：\n```json\n{\n  \"case_id\": \"order-timeout-01\",\n  \"success\": true,\n  \"total_seconds\": 12.4,\n  \"model_calls\": 5,\n  \"tool_seconds\": 3.1,\n  \"retries\": 0,\n  \"cost\": 0.08\n}\n```\n一次只改一个主要因素，比如先固定工具顺序，再尝试缩减工具结果，最后验证独立查询并行。这样才能解释收益来自哪里。还要保留失败样本：如果速度变快却经常修错代码，优化并没有达到任务目标。"
+      "body": "回到开头的修复任务，先准备一组有明确通过条件的案例，例如“指定测试通过，且没有破坏已有功能”。在同一组案例上比较改动前后，记录成功率、总费用、模型请求次数、工具耗时、重试和最终完成时间。\n\nOpenAI 的延迟优化资料建议从用户真正等待的地方开始测量，并观察代表性流量上的 p50、p95。p50 接近中间水平，p95 用来观察较慢的一端；少量顺利样例不能代表真实体验。\n\n自拟记录格式可以是：\n```json\n{\n  \"case_id\": \"order-timeout-01\",\n  \"success\": true,\n  \"total_seconds\": 12.4,\n  \"model_calls\": 5,\n  \"tool_seconds\": 3.1,\n  \"retries\": 0,\n  \"cost\": 0.08\n}\n```\n一次只改一个主要因素，比如先固定工具顺序，再尝试缩减工具结果，最后验证独立查询并行。这样才能解释收益来自哪里。还要保留失败样本：如果速度变快却经常修错代码，优化并没有达到任务目标。",
+      "id": "measurement"
     },
     {
       "title": "学完后用四个问题检查理解",
@@ -451,7 +494,8 @@
           "source": "https://blog.bytebytego.com/p/how-chatgpt-optimizes-its-agent-loop",
           "afterParagraph": 5
         }
-      ]
+      ],
+      "id": "self-check"
     }
   ],
   "references": [
@@ -491,5 +535,6 @@
       "title": "DistServe：Prefill/Decode 分离论文",
       "url": "https://arxiv.org/abs/2401.09670"
     }
-  ]
+  ],
+  "assessmentRequired": true
 }
