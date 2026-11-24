@@ -1,0 +1,10 @@
+import fs from 'node:fs/promises';
+await fs.mkdir('dist/server',{recursive:true});
+await fs.mkdir('dist/.openai',{recursive:true});
+const html=await fs.readFile('web/index.html','utf8');
+const css=await fs.readFile('web/style.css','utf8');
+const js=await fs.readFile('web/app.js','utf8');
+const worker=await fs.readFile('worker/index.js','utf8');
+await fs.writeFile('dist/server/index.js','const HTML='+JSON.stringify(html.replace('/*__STYLE__*/',()=>css).replace('/*__APP__*/',()=>js))+';\n'+worker);
+await fs.copyFile('.openai/hosting.json','dist/.openai/hosting.json');
+console.log('Built Worker and embedded application.');
