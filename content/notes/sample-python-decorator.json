@@ -1,0 +1,30 @@
+{
+  "id": "sample-python-decorator",
+  "category": "Python 进阶",
+  "title": "装饰器：给函数加一层能力",
+  "summary": "用一个简单例子理解装饰器，学会在不改动业务函数的情况下添加日志。",
+  "tags": [
+    "装饰器",
+    "函数",
+    "Python"
+  ],
+  "points": [
+    {
+      "title": "把函数当作参数传递",
+      "body": "Python 函数也是对象，可以传给另一个函数。装饰器接收原函数，返回一个包装函数。调用包装函数时，它可以先做额外工作，再调用原函数。"
+    },
+    {
+      "title": "用 functools.wraps 保留函数信息",
+      "body": "```python\nfrom functools import wraps\n\ndef log_call(fn):\n    @wraps(fn)\n    def wrapper(*args, **kwargs):\n        print(f\"调用 {fn.__name__}\")\n        return fn(*args, **kwargs)\n    return wrapper\n\n@log_call\ndef greet(name):\n    return f\"你好，{name}\"\n\nprint(greet(\"Agent\"))\n```\n@log_call 等价于 greet = log_call(greet)。wraps 用来保留原函数的名称和文档等元信息。"
+    },
+    {
+      "title": "什么时候适合用装饰器",
+      "body": "日志、计时和权限检查常常是多个函数都需要的能力。装饰器能集中这些重复逻辑。但不要把大量业务逻辑藏在装饰器里，否则调用流程会变得难以追踪。"
+    }
+  ],
+  "sample": true,
+  "images": [],
+  "created": "2026-11-24T09:00:00.000Z",
+  "updated": "2026-11-24T09:00:00.000Z",
+  "sourceTitle": "知序入门示例"
+}

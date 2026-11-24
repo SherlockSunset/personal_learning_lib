@@ -1,0 +1,30 @@
+{
+  "id": "sample-async",
+  "category": "Python 进阶",
+  "title": "async / await：等待时别闲着",
+  "summary": "理解异步编程的使用场景，让多个网络请求更高效地协作。",
+  "tags": [
+    "asyncio",
+    "并发",
+    "异步"
+  ],
+  "points": [
+    {
+      "title": "异步最适合等待 I/O",
+      "body": "网络请求和文件访问可能花大量时间等待。异步任务可以在等待期间让出执行权，让其他任务继续推进。CPU 密集计算通常不会因为加了 async 就变快。"
+    },
+    {
+      "title": "创建并发任务，而非逐个等待",
+      "body": "```python\nimport asyncio\n\nasync def job(name):\n    await asyncio.sleep(1)\n    return name\n\nasync def main():\n    results = await asyncio.gather(job(\"A\"), job(\"B\"))\n    print(results)\n\nasyncio.run(main())\n```\ngather 让两个任务一起推进。如果逐个 await，通常会变成先等 A 再等 B。"
+    },
+    {
+      "title": "别在事件循环里执行阻塞调用",
+      "body": "同步 requests 请求或 time.sleep 会阻塞事件循环。使用异步 HTTP 客户端和 asyncio.sleep；无法改写的同步 I/O 可以考虑 asyncio.to_thread，并加入并发限制与超时。"
+    }
+  ],
+  "sample": true,
+  "images": [],
+  "created": "2026-11-24T09:00:00.000Z",
+  "updated": "2026-11-24T09:00:00.000Z",
+  "sourceTitle": "知序入门示例"
+}
