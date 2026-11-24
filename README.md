@@ -2,6 +2,8 @@
 
 面向入门级大模型 Agent 开发工程师。网页只展示知识、分类和搜索；内容由本地 Codex 整理，完成后由你手动提交与推送到 GitHub，GitHub Pages 构建更新。
 
+默认文章同时提供「知识提要」和「详细讲解」两层内容，优先打开详细讲解。后者覆盖主要技术主题，展开原理、步骤、贯穿案例、使用边界与自测；原文通过页面顶部与底部的链接阅读。文件若没有可核实的原文链接，则显示来源标题，不编造 URL。
+
 ## 日常使用：直接交给本地 Codex
 
 在 Codex 中打开本项目，然后发出类似请求：
@@ -64,7 +66,7 @@ npm run note:save -- "inbox/note-内容指纹/draft.json" --replace
 npm run validate
 ```
 
-JSON 结构见任一 `content/notes/*.json`：id、title、category、summary、tags、points、images、source、sourceTitle、created、updated。其中 points 每项包含 title 与 body；正文支持纯文本和代码围栏。分类固定为 Python 进阶、Agent 开发、大模型基础、RAG 与检索、工程实践。新增个人笔记不写 `sample: true`。
+JSON 结构见 `content/notes/note-0f561bcbef.json`：id、title、category、summary、tags、points、explanations、references、images、source、sourceTitle、created、updated。points（知识提要）和 explanations（详细讲解）每项包含 title 与 body；正文支持纯文本和代码围栏。references 每项为 title 与 url，用于可点击的延伸资料。旧笔记没有 explanations 时继续直接显示 points。分类固定为 Python 进阶、Agent 开发、大模型基础、RAG 与检索、工程实践。新增个人笔记不写 `sample: true`。
 
 图片存放于 `content/assets/`，JSON 使用 `assets/文章id/图片.png` 相对路径。CLI 支持 TXT、Markdown、HTML（文件或公开网页）、PNG/JPEG/WebP/GIF，单文件最多 5 MB。Markdown 本地图片须位于文章目录内；复制失败会报告，不静默伪造成功。登录可见、动态渲染或反爬网页可改为提供文件；PDF/DOCX 由本地 Codex 用对应文档工具提取后整理。
 

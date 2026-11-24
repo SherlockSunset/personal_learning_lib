@@ -7,12 +7,18 @@ import {root,loadNotes,validateNote} from './scripts/content.mjs';
 import {ingest,saveDraft,extractHTML,publicURL} from './scripts/ingest.mjs';
 const notes=await loadNotes();assert.ok(notes.length>=0);
 const html=await fs.readFile(path.join(root,'dist/index.html'),'utf8');
-assert.match(html,/我的学习库/);assert.doesNotMatch(html,/\/api\/|API Key|id="import-dialog"|data-edit=|data-delete=|data-favorite=/);
+assert.match(html,/我的学习库/);assert.doesNotMatch(html,/id="(?:import|editor|settings)-dialog"|data-edit=|data-delete=|data-favorite=/);
+// Knowledge articles may legitimately mention API documentation. Check the
+// client program rather than banning those words in published note content.
+const appSource=await fs.readFile(path.join(root,'web/app.js'),'utf8');assert.doesNotMatch(appSource,/fetch\s*\(|XMLHttpRequest|\/api\//);
 const script=html.match(/<script>([\s\S]*)<\/script>/)[1];new vm.Script(script);
 const embedded=vm.runInNewContext(script.slice(0,script.indexOf(';\n'))+';LIBRARY_DATA');assert.equal(embedded.length,notes.length);
+for(const n of notes){const built=embedded.find(x=>x.id===n.id);assert.equal(built.source,n.source);assert.equal(built.explanations?.length,n.explanations?.length);assert.equal(built.references?.length,n.references?.length);}
 assert.equal(await fs.readFile(path.join(root,'dist/.nojekyll'),'utf8'),'');
 for(const n of notes)for(const image of n.images){assert.equal(new URL(image,'https://example.github.io/learning/').pathname,'/learning/'+image);await fs.access(path.join(root,'dist',image));}
 assert.throws(()=>validateNote({...notes[0],category:'其他'}));assert.throws(()=>validateNote({...notes[0],images:['assets/../secret.png']}));
+assert.throws(()=>validateNote({...notes[0],explanations:[{title:'缺少讲解',body:''}]}));
+assert.throws(()=>validateNote({...notes[0],references:[{title:'无效协议',url:'javascript:alert(1)'}]}));
 const hostile=JSON.stringify([{title:'</script><script>alert(1)</script>'}]).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');assert.doesNotMatch(hostile,/<\/script>/);assert.match(JSON.parse(hostile)[0].title,/<script>/);
 assert.equal(extractHTML('<title>例子</title><article><p>内容</p><img src="figure.png"></article><script>bad</script>').text,'内容');
 for(const url of ['file:///a','http://127.0.0.1','https://host.local','https://user:pass@example.com'])assert.throws(()=>publicURL(url));

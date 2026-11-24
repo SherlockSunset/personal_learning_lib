@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import vm from 'node:vm';
 import {root,loadNotes} from './scripts/content.mjs';
-const notes=(await loadNotes()).map(n=>Object.fromEntries(['id','title','category','summary','tags','points','images','source','sourceTitle','created','updated','sample'].filter(k=>n[k]!==undefined).map(k=>[k,n[k]])));
+const notes=(await loadNotes()).map(n=>Object.fromEntries(['id','title','category','summary','tags','points','explanations','references','images','source','sourceTitle','created','updated','sample'].filter(k=>n[k]!==undefined).map(k=>[k,n[k]])));
 const html=await fs.readFile(path.join(root,'web/index.html'),'utf8');
 const css=await fs.readFile(path.join(root,'web/style.css'),'utf8');
 const js=await fs.readFile(path.join(root,'web/app.js'),'utf8');

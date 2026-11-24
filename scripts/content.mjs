@@ -10,6 +10,8 @@ export function validateNote(n){
  if(!categories.includes(n.category))throw Error(n.id+': 分类不在固定分类中');
  if(!Array.isArray(n.tags)||n.tags.some(t=>typeof t!=='string'))throw Error(n.id+': tags 必须为字符串数组');
  if(!Array.isArray(n.points)||!n.points.length||n.points.some(p=>typeof p.title!=='string'||!p.title.trim()||typeof p.body!=='string'||!p.body.trim()))throw Error(n.id+': 每个知识点必须有标题和正文');
+ if(n.explanations!==undefined&&(!Array.isArray(n.explanations)||!n.explanations.length||n.explanations.some(p=>typeof p.title!=='string'||!p.title.trim()||typeof p.body!=='string'||!p.body.trim())))throw Error(n.id+': 详细讲解必须包含标题和正文');
+ if(n.references!==undefined&&(!Array.isArray(n.references)||n.references.some(r=>typeof r.title!=='string'||!r.title.trim()||typeof r.url!=='string'||!/^https?:\/\//i.test(r.url))))throw Error(n.id+': 参考资料必须包含标题和公开链接');
  for(const key of ['created','updated'])if(typeof n[key]!=='string'||!/^\d{4}-\d{2}-\d{2}T/.test(n[key])||!Number.isFinite(Date.parse(n[key])))throw Error(n.id+': '+key+' 必须为 ISO 时间');
  if(n.source&&!/^https?:\/\//i.test(n.source))throw Error(n.id+': source 只允许 http(s) 来源链接');
  if(!Array.isArray(n.images)||n.images.some(s=>typeof s!=='string'||!/^assets\/[a-zA-Z0-9_./-]+$/.test(s)||s.split('/').includes('..')))throw Error(n.id+': 图片必须为 assets/ 下的本地资源');
