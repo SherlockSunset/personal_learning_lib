@@ -43,5 +43,5 @@ const QuizUI=(()=>{
   if(c.store.warning)document.getElementById('quiz-message').innerHTML=warning(c);
  });
  document.addEventListener('submit',event=>{if(event.target.id!=='quiz-answer-form')return;event.preventDefault();const c=sessions.get(event.target.closest('[data-quiz-note]').dataset.quizNote);try{const attempt=QuizCore.submit(c.quiz,c.store.record.draft);c.store.record.attempts.unshift(attempt);c.store.record.draft=null;c.attemptId=attempt.id;c.view='result';c.error='';save(c);repaint(c);document.getElementById('quiz-result-summary')?.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){c.error=e.message;document.getElementById('quiz-message').innerHTML=warning(c);document.getElementById('quiz-message')?.scrollIntoView({behavior:'smooth',block:'start'});}});
- return {html};
+ return {html,snapshot:()=>[...sessions].map(([id,c])=>({key:'zhixu-quiz-v1:'+id,record:c.store.record,warning:c.store.warning}))};
 })();

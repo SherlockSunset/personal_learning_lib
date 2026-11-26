@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "validate": "node build.mjs && node check.mjs && node scripts/test-quizzes.mjs",
+    "validate": "node build.mjs && node check.mjs && node scripts/test-quizzes.mjs && node scripts/test-records.mjs",
     "dev": "node build.mjs && node dev.mjs",
     "ingest": "node scripts/cli.mjs ingest",
     "note:save": "node scripts/cli.mjs save"
