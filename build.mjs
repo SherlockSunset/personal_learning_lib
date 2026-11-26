@@ -6,13 +6,15 @@ import {loadQuizzes} from './scripts/quizzes.mjs';
 const allNotes=await loadNotes();const quizzes=await loadQuizzes(allNotes);
 const notes=allNotes.map(n=>Object.fromEntries(['id','title','category','summary','tags','points','explanations','references','images','source','sourceTitle','created','updated','sample'].filter(k=>n[k]!==undefined).map(k=>[k,n[k]])));
 const html=await fs.readFile(path.join(root,'web/index.html'),'utf8');
-const css=await fs.readFile(path.join(root,'web/style.css'),'utf8')+'\n'+await fs.readFile(path.join(root,'web/quiz.css'),'utf8');
+const css=await fs.readFile(path.join(root,'web/style.css'),'utf8')+'\n'+await fs.readFile(path.join(root,'web/quiz.css'),'utf8')+'\n'+await fs.readFile(path.join(root,'web/learning.css'),'utf8');
 const js=await fs.readFile(path.join(root,'web/app.js'),'utf8');
 const quizCore=(await fs.readFile(path.join(root,'web/quiz-core.js'),'utf8')).replace(/^export /gm,'');
 const quizUI=await fs.readFile(path.join(root,'web/quiz.js'),'utf8');
+const learningCore=(await fs.readFile(path.join(root,'web/learning-core.js'),'utf8')).replace(/^export /gm,'');
+const learningUI=await fs.readFile(path.join(root,'web/learning.js'),'utf8');
 const serialized=JSON.stringify(notes).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
 const serializedQuizzes=JSON.stringify(quizzes).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
-const script='const LIBRARY_DATA='+serialized+';\nconst LIBRARY_QUIZZES='+serializedQuizzes+';\n'+quizCore+'\n'+quizUI+'\n'+js;
+const script='const LIBRARY_DATA='+serialized+';\nconst LIBRARY_QUIZZES='+serializedQuizzes+';\n'+quizCore+'\n'+quizUI+'\n'+learningCore+'\n'+learningUI+'\n'+js;
 new vm.Script(script);
 const output=path.join(root,'dist');
 // Only the fixed generated output is cleaned; content stays in content/.
